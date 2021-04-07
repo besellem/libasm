@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/04/07 01:57:49 by besellem         ###   ########.fr       */
+/*   Updated: 2021/04/07 10:06:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libc.h>
-#include <errno.h>
 #include <libasm.h>
+#include <errno.h>
 
 int	main(void)
 {
