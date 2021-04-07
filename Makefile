@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/03/26 13:14:13 by besellem         ###   ########.fr        #
+#    Updated: 2021/04/06 17:48:10 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ SRCS		+=	$(SRCS_FOLDER)/ft_strlen.s
 OBJS		=	$(SRCS:.s=.o)
 
 ## Include
-INC			=	-Iinc
+INC			=	-Iinc -L. -lasm
 
 ## Commands
 ASMCOMPIL	=	nasm
@@ -57,7 +57,7 @@ $(NAME):	$(OBJS)
 all:		$(NAME)
 
 test:		$(NAME)
-			$(MUTE) $(CC) $(CFLAGS) main.c -o $(MAIN_TEST) $(INC) -Iasm
+			$(MUTE) $(CC) $(CFLAGS) main.c -o $(MAIN_TEST) $(INC)
 
 clean:
 			$(MUTE) $(RM) $(OBJS)

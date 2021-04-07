@@ -1,5 +1,22 @@
 {
 	"files.associations": {
-		"errno.h": "c"
+		"errno.h": "c",
+		"libc.h": "c",
+		"boolean.h": "c",
+		"algorithm": "cpp",
+		"memory_resource": "cpp",
+		"functional": "cpp",
+		"iterator": "cpp",
+		"locale": "cpp",
+		"varargs.h": "c",
+		"string.h": "c",
+		"stdlib.h": "c",
+		"time.h": "c",
+		"stdarg.h": "c",
+		"cstdarg": "c",
+		"param.h": "c",
+		"__config": "cpp",
+		"cstdio": "cpp",
+		"alloca.h": "c"
 	}
 }
