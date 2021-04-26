@@ -2,6 +2,6 @@ global	_ft_write
 extern	___error
 
 _ft_write:
-	xor		eax, eax
-	mov		rax, 1
+	mov		eax, 0x2000004		; write's syscall number
 	syscall
+	ret

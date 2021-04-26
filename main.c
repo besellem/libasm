@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/04/27 00:20:35 by besellem         ###   ########.fr       */
+/*   Updated: 2021/04/27 00:37:48 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,16 @@ int	test_write(void)
 {
 	int	ret = 0;
 
-	ret += write_single_test(STDOUT_FILENO, "Hello", 5);
-	ret += write_single_test(STDOUT_FILENO, "", 0);
-	// ret += write_single_test(STDOUT_FILENO, "Hello world !\nHow are you ?", );
+	ret += write_single_test(STDERR_FILENO, "Hello", 5);
+	ret += write_single_test(STDERR_FILENO, "", 0);
+	ret += write_single_test(STDERR_FILENO, "Hello world ! How are you ?", 27);
 	return (ret);
 }
 #endif	/* defined(__FT_WRITE__) */
 
 
+// to run like this => ./test 2>/dev/null
+// (avoid write syscalls to be printed)
 int	main(void)
 {
 	#if defined(__FT_STRLEN__)

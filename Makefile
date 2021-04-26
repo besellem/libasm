@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/04/27 00:00:59 by besellem         ###   ########.fr        #
+#    Updated: 2021/04/27 00:31:48 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS_FOLDER	:=	srcs
 SRCS		+=	$(SRCS_FOLDER)/ft_strlen.s
 # SRCS		+=	$(SRCS_FOLDER)/ft_strcpy.s
 # SRCS		+=	$(SRCS_FOLDER)/ft_strcmp.s
-# SRCS		+=	$(SRCS_FOLDER)/ft_write.s
+SRCS		+=	$(SRCS_FOLDER)/ft_write.s
 # SRCS		+=	$(SRCS_FOLDER)/ft_read.s
 # SRCS		+=	$(SRCS_FOLDER)/ft_strdup.s
 
@@ -34,7 +34,7 @@ INC			=	-Iinc -L. -lasm
 DEFINES		+=	-D__FT_STRLEN__
 # DEFINES		+=	-D__FT_STRCPY__
 # DEFINES		+=	-D__FT_STRCMP__
-# DEFINES		+=	-D__FT_WRITE__
+DEFINES		+=	-D__FT_WRITE__
 # DEFINES		+=	-D__FT_READ__
 # DEFINES		+=	-D__FT_STRDUP__
 
