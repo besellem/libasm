@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/04/27 00:31:48 by besellem         ###   ########.fr        #
+#    Updated: 2021/04/27 17:13:17 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,7 @@ all:		$(NAME)
 
 test:		$(NAME)
 			$(MUTE) $(CC) $(CFLAGS) main.c -o $(MAIN_TEST) $(INC) $(DEFINES)
+			clear && ./$(MAIN_TEST) 2>/dev/null
 
 clean:
 			$(MUTE) $(RM) $(OBJS)
