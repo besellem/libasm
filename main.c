@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/06 11:55:55 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/06 12:15:42 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,43 @@ int		test_strlen(void)
 	ret += strlen_single_test("Hello");
 	ret += strlen_single_test("");
 	ret += strlen_single_test("Hello world !\nHow are you ?");
+	return (ret);
+}
+
+
+// TEST FT_STRCPY
+#define STRCPY_BUF 100
+
+int		strcpy_single_test(const char *str)
+{
+	char	real_dst[STRCPY_BUF];
+	char	my_dst[STRCPY_BUF];
+	
+	#if defined(__FT_STRCPY__)
+	ft_strcpy(my_dst, str);
+	#endif	/* defined(__FT_STRCPY__) */
+	
+	strcpy(real_dst, str);
+	if (strcmp(real_dst, my_dst) == 0)
+		return (0);
+	else
+	{
+		printf(RED "KO => real_dst[%s] my_dst[%s]" CLR_COLOR "\n", real_dst, my_dst);
+		return (1);
+	}
+}
+
+int		test_strcpy(void)
+{
+	int	ret = 0;
+
+	ret += strcpy_single_test("");
+	ret += strcpy_single_test("Hello");
+	ret += strcpy_single_test("Hello world !\0 ?");
+	ret += strcpy_single_test("Hello world !\0?");
+	ret += strcpy_single_test("abc");
+	ret += strcpy_single_test("abc");
+	ret += strcpy_single_test("test here");
 	return (ret);
 }
 

@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/06 11:16:35 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/06 12:13:00 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ MAIN_TEST	=	test
 SRCS_FOLDER	:=	srcs
 
 SRCS		+=	$(SRCS_FOLDER)/ft_strlen.s
-# SRCS		+=	$(SRCS_FOLDER)/ft_strcpy.s
+SRCS		+=	$(SRCS_FOLDER)/ft_strcpy.s
 SRCS		+=	$(SRCS_FOLDER)/ft_strcmp.s
 SRCS		+=	$(SRCS_FOLDER)/ft_write.s
 # SRCS		+=	$(SRCS_FOLDER)/ft_read.s
@@ -32,7 +32,7 @@ INC			=	-Iinc -L. -lasm
 
 ## Defines (for tests)
 DEFINES		+=	-D__FT_STRLEN__
-# DEFINES		+=	-D__FT_STRCPY__
+DEFINES		+=	-D__FT_STRCPY__
 DEFINES		+=	-D__FT_STRCMP__
 DEFINES		+=	-D__FT_WRITE__
 # DEFINES		+=	-D__FT_READ__
