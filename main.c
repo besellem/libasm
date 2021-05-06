@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/06 16:03:32 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:27:57 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,13 @@ int		write_single_test(int fildes, const void *buf, size_t nbyte)
 	errno = 0;
 	#endif	/* defined(__FT_WRITE__) */
 	
-	(void)my_errno;
-	(void)real_errno;
-	// if (my_errno == real_errno) // Check errno
-	// 	return (0);
-	// else
-	// {
-	// 	printf(RED "KO => real_errno[%d] my_errno[%d]" CLR_COLOR "\n", real_errno, my_errno);
-	// 	return (1);
-	// }
+	if (my_errno == real_errno) // Check errno
+		return (0);
+	else
+	{
+		printf(RED "KO => real_errno[%d] my_errno[%d]" CLR_COLOR "\n", real_errno, my_errno);
+		return (1);
+	}
 
 	if (my_ret == real_ret) // Check length
 		return (0);
@@ -173,17 +171,63 @@ int		test_write(void)
 }
 
 
+// TEST FT_READ
+int		read_single_test(int fildes, void *buf, size_t nbyte)
+{
+	ssize_t	my_ret		= 0;
+	ssize_t	real_ret	= read(fildes, buf, nbyte);
+	int		my_errno	= 0;
+	int		real_errno	= errno;
+
+	errno = 0;
+	#if defined(__FT_READ__)
+	my_ret = ft_read(fildes, buf, nbyte);
+	my_errno = errno;
+	errno = 0;
+	#endif	/* defined(__FT_READ__) */
+	
+	if (my_errno == real_errno) // Check errno
+		return (0);
+	else
+	{
+		printf(RED "KO => real_errno[%d] my_errno[%d]" CLR_COLOR "\n", real_errno, my_errno);
+		return (1);
+	}
+
+	if (my_ret == real_ret) // Check length
+		return (0);
+	else
+	{
+		printf(RED "KO" CLR_COLOR " => real_ret[%zd] my_ret[%zd]\n", real_ret, my_ret);
+		return (1);
+	}
+}
+
+int		test_read(void)
+{
+	int	ret = 0;
+
+	ret += read_single_test(STDERR_FILENO, "Hello", 5);
+	ret += read_single_test(STDERR_FILENO, "", 0);
+	ret += read_single_test(STDERR_FILENO, "Hello world ! How are you ?", 27);
+	ret += read_single_test(234, "Hello", 5);
+	ret += read_single_test(234, "Hello world ! How are you ?", 27);
+	return (ret);
+}
+
+
 // TEST FT_STRDUP
 int		strdup_single_test(const char *str)
 {
-	char	*real_dst = strdup(str);
-	char	*my_dst = NULL;
+	char	*my_dst		= NULL;
+	char	*real_dst	= strdup(str);
+	int		diff;
 	
 	#if defined(__FT_STRDUP__)
 	my_dst = ft_strdup(str);
 	#endif	/* defined(__FT_STRDUP__) */
 	
-	int		diff = strcmp(real_dst, my_dst);
+	diff = strcmp(real_dst, my_dst);
 
 	if (real_dst)
 		free(real_dst);

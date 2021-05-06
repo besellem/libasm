@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:37:55 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/06 14:29:42 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:02:09 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,15 @@ size_t			ft_strlen(const char *s);
 ssize_t			ft_write(int fildes, const void *buf, size_t nbyte);
 ssize_t			ft_read(int fildes, void *buf, size_t nbyte);
 
+/*
+** Bonus
+*/
 typedef	struct	s_list
 {
 	void			*data;
 	struct s_list	*next;
 }				t_list;
+
+int				ft_atoi_base(char *str, char *base);
 
 #endif
