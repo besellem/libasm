@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/06 12:15:42 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/06 14:56:32 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		strcpy_single_test(const char *str)
 	#endif	/* defined(__FT_STRCPY__) */
 	
 	strcpy(real_dst, str);
-	if (strcmp(real_dst, my_dst) == 0)
+	if (0 == strcmp(real_dst, my_dst))
 		return (0);
 	else
 	{
@@ -99,10 +99,13 @@ int		strcmp_single_test(const char *s1, const char *s2)
 	#endif	/* defined(__FT_STRCMP__) */
 	
 	if (my_diff == real_diff)
+	{
+		printf(GREEN "OK" CLR_COLOR " => real_diff[%d] my_diff[%d]\n", real_diff, my_diff);
 		return (0);
+	}
 	else
 	{
-		printf(RED "KO => real_diff[%d] my_diff[%d]" CLR_COLOR "\n", real_diff, my_diff);
+		printf(RED "KO" CLR_COLOR " => real_diff[%d] my_diff[%d]\n", real_diff, my_diff);
 		return (1);
 	}
 }
@@ -117,6 +120,7 @@ int		test_strcmp(void)
 	ret += strcmp_single_test("Hello world !\0?", "Hello world !\0 ?");
 	ret += strcmp_single_test("abc", "abd");
 	ret += strcmp_single_test("abc", "aba");
+	ret += strcmp_single_test("abc", "zbc");
 	ret += strcmp_single_test("test here", "another test, why not ?");
 	return (ret);
 }
@@ -169,12 +173,53 @@ int		test_write(void)
 }
 
 
+// TEST FT_STRDUP
+int		strdup_single_test(const char *str)
+{
+	char	*real_dst = strdup(str);
+	char	*my_dst = NULL;
+	
+	#if defined(__FT_STRDUP__)
+	my_dst = ft_strdup(str);
+	#endif	/* defined(__FT_STRDUP__) */
+	
+	int		diff = strcmp(real_dst, my_dst);
+
+	if (real_dst)
+		free(real_dst);
+	if (my_dst)
+		free(my_dst);
+	
+	if (0 == diff)
+		return (0);
+	else
+	{
+		printf(RED "KO => real_dst[%s] my_dst[%s]" CLR_COLOR "\n", real_dst, my_dst);
+		return (1);
+	}
+}
+
+int		test_strdup(void)
+{
+	int	ret = 0;
+
+	ret += strdup_single_test("");
+	ret += strdup_single_test("Hello");
+	ret += strdup_single_test("Hello world !\0 ?");
+	ret += strdup_single_test("Hello world !\0?");
+	ret += strdup_single_test("abc");
+	ret += strdup_single_test("abc");
+	ret += strdup_single_test("test here");
+	return (ret);
+}
+
+
 void	make_test(const char *func_name, int (*f)(void))
 {
 	if (f())
 		printf(RED "Your %s is KO" CLR_COLOR "\n", func_name);
 	else
-		printf(GREEN "%s behave like the real one !" CLR_COLOR "\n", func_name);
+		printf(GREEN "%s is OK!" CLR_COLOR "\n", func_name);
 }
 
 
