@@ -1,14 +1,13 @@
-global _ft_strlen
+global	_ft_strlen
 
 _ft_strlen:
-	xor		rcx, rcx			; init rcx to 0
+	xor		rax, rax			; init rax to 0
 
 loop:
-	cmp		byte [rdi + rcx], 0	; compare current char to '\0' => (str[i] == '\0')
-	jz		finish				; go to the return part of the func if the cmp is true
-	inc		rcx					; increment rcx
+	cmp		byte [rdi + rax], 0	; compare current char to '\0' => (str[i] == '\0')
+	jz		return				; go to the return part of the func if ZF (zero flag) == 1 
+	inc		rax					; increment rax
 	jmp		loop				; while loop
 
-finish:
-	mov		rax, rcx			; mov the counter into rax
-	ret							; rax is the returned value of the function
+return:
+	ret							; rax is the returned value of the function and it is already set since we used it as an index counter
