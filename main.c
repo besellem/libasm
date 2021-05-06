@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/06 14:56:32 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:03:32 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		strcpy_single_test(const char *str)
 		return (0);
 	else
 	{
-		printf(RED "KO => real_dst[%s] my_dst[%s]" CLR_COLOR "\n", real_dst, my_dst);
+		printf(RED "KO" CLR_COLOR " => real_dst[%s] my_dst[%s]\n", real_dst, my_dst);
 		return (1);
 	}
 }
@@ -100,7 +100,7 @@ int		strcmp_single_test(const char *s1, const char *s2)
 	
 	if (my_diff == real_diff)
 	{
-		printf(GREEN "OK" CLR_COLOR " => real_diff[%d] my_diff[%d]\n", real_diff, my_diff);
+		// printf(GREEN "OK" CLR_COLOR " => real_diff[%d] my_diff[%d]\n", real_diff, my_diff);
 		return (0);
 	}
 	else
@@ -155,7 +155,7 @@ int		write_single_test(int fildes, const void *buf, size_t nbyte)
 		return (0);
 	else
 	{
-		printf(RED "KO => real_ret[%zd] my_ret[%zd]" CLR_COLOR "\n", real_ret, my_ret);
+		printf(RED "KO" CLR_COLOR " => real_ret[%zd] my_ret[%zd]\n", real_ret, my_ret);
 		return (1);
 	}
 }
@@ -194,7 +194,7 @@ int		strdup_single_test(const char *str)
 		return (0);
 	else
 	{
-		printf(RED "KO => real_dst[%s] my_dst[%s]" CLR_COLOR "\n", real_dst, my_dst);
+		printf(RED "KO" CLR_COLOR " => real_dst[%s] my_dst[%s]\n", real_dst, my_dst);
 		return (1);
 	}
 }
@@ -214,10 +214,10 @@ int		test_strdup(void)
 }
 
 
-void	make_test(const char *func_name, int (*f)(void))
+void	make_test(const char *func_name, int (*func)(void))
 {
-	if (f())
-		printf(RED "Your %s is KO" CLR_COLOR "\n", func_name);
+	if (func())
+		printf(RED "%s is KO" CLR_COLOR "\n", func_name);
 	else
 		printf(GREEN "%s is OK!" CLR_COLOR "\n", func_name);
 }

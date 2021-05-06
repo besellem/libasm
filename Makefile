@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/06 14:56:02 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/06 16:22:26 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS		+=	$(SRCS_FOLDER)/ft_strlen.s
 SRCS		+=	$(SRCS_FOLDER)/ft_strcpy.s
 SRCS		+=	$(SRCS_FOLDER)/ft_strcmp.s
 SRCS		+=	$(SRCS_FOLDER)/ft_write.s
-# SRCS		+=	$(SRCS_FOLDER)/ft_read.s
+SRCS		+=	$(SRCS_FOLDER)/ft_read.s
 SRCS		+=	$(SRCS_FOLDER)/ft_strdup.s
 
 ## Objects
@@ -34,7 +34,7 @@ INC			=	-Iinc -L. -lasm
 DEFINES		+=	-D__FT_STRLEN__
 DEFINES		+=	-D__FT_STRCPY__
 DEFINES		+=	-D__FT_STRCMP__
-# DEFINES		+=	-D__FT_WRITE__
+DEFINES		+=	-D__FT_WRITE__
 # DEFINES		+=	-D__FT_READ__
 DEFINES		+=	-D__FT_STRDUP__
 
@@ -72,10 +72,10 @@ test:		$(NAME)
 			$(MUTE) echo "# COMPILED"
 			$(MUTE) ./$(MAIN_TEST) 2>/dev/null
 
-			$(MUTE) echo
-			$(MUTE) $(CC) $(CFLAGS) -fsanitize=address $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
-			$(MUTE) echo "# COMPILED WITH FSANITIZE"
-			$(MUTE) ./$(MAIN_TEST) 2>/dev/null
+# $(MUTE) echo
+# $(MUTE) $(CC) $(CFLAGS) -fsanitize=address $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
+# $(MUTE) echo "# COMPILED WITH FSANITIZE"
+# $(MUTE) ./$(MAIN_TEST) 2>/dev/null
 
 clean:
 			$(MUTE) $(RM) $(OBJS)
