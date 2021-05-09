@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include <libasm.h>
-#include <libc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 
 #define RED "\e[1;31m"

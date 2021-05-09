@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-MUTE		=	@
+MUTE		=	
 NAME		=	libasm.a
 MAIN_TEST	=	test
 
@@ -28,7 +28,7 @@ SRCS		+=	$(SRCS_FOLDER)/ft_strdup.s
 OBJS		=	$(SRCS:.s=.o)
 
 ## Include
-INC			=	-Iinc -L. -lasm
+INC			=	-L. -lasm -Iinc
 
 ## Defines (for tests)
 DEFINES		+=	-D__FT_STRLEN__
@@ -57,17 +57,17 @@ endif
 
 ifeq ($(UNAME), Linux)
 .s.o:
-			$(MUTE) $(ASMCOMPIL) -felf64 -o $@ $?
+			$(MUTE) $(ASMCOMPIL) -felf64 -o $@ $? -D__LINUX__
 endif
 
 
 ifeq ($(UNAME), Linux)
 $(NAME):	$(OBJS)
-			$(MUTE) $(LIBC) $(NAME) $(OBJS) -D__LINUX__
+			$(MUTE) $(LIBC) $(NAME) $(OBJS)
 endif
 
 ifeq ($(UNAME), Darwin)
-$(NAME):	$(OBJS)
+$(NAME):
 			$(MUTE) $(LIBC) $(NAME) $(OBJS)
 endif
 
@@ -75,16 +75,16 @@ endif
 all:		$(NAME)
 
 test:		$(NAME)
-			$(MUTE) $(CC) $(CFLAGS) $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
+			$(MUTE) $(CC) $(CFLAGS) $(DEFINES) -o $(MAIN_TEST) $(OBJS) main.c $(INC)
 			$(MUTE) clear
 			
-			$(MUTE) echo "# COMPILED"
-			$(MUTE) ./$(MAIN_TEST) 2>/dev/null
+			@ echo "# COMPILED"
+			@ ./$(MAIN_TEST) 2>/dev/null
 
-# $(MUTE) echo
+# @ echo
 # $(MUTE) $(CC) $(CFLAGS) -fsanitize=address $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
-# $(MUTE) echo "# COMPILED WITH FSANITIZE"
-# $(MUTE) ./$(MAIN_TEST) 2>/dev/null
+# @ echo "# COMPILED WITH FSANITIZE"
+# @ ./$(MAIN_TEST) 2>/dev/null
 
 clean:
 			$(MUTE) $(RM) $(OBJS)
