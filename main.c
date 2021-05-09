@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/06 16:27:57 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/09 11:35:37 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		test_strlen(void)
 	int	ret = 0;
 
 	ret += strlen_single_test("Hello");
+	ret += strlen_single_test("WHY NOT \0 ??");
 	ret += strlen_single_test("");
 	ret += strlen_single_test("Hello world !\nHow are you ?");
 	return (ret);
@@ -293,6 +294,8 @@ int		main(void)
 	#if defined(__FT_STRDUP__)
 	make_test("ft_strdup", &test_strdup);
 	#endif	/* defined(__FT_STRDUP__) */
+
+	// ft_write(-1, "test", 1);
 	
 	return (0);
 }

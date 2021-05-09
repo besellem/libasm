@@ -1,32 +1,37 @@
-global	_ft_write
+%ifdef __LINUX__
+	%define SCALL		1
+	%define FT_WRITE	ft_write
+	%define ERR			__errno_location
+%else
+	%define SCALL		0x2000004
+	%define FT_WRITE	_ft_write
+	%define ERR			___error
+%endif
 
-extern	__errno_location				; Linux errno
-extern	___error						; macOS errno
+global	FT_WRITE
+extern	ERR
 
-_ft_write:
+FT_WRITE:
 	; Check if Linux or macOS at compilation
+	mov			rax, SCALL				; write's syscall number
+	syscall								; call (write in this case)
+
 	%ifdef __LINUX__
-		mov		rax, 1					; write's syscall number (Linux)
+		cmp		rax, 0
+		jl		error					; jump to error if syscall's return < 0
 	%else
-		mov		rax, 0x2000004			; write's syscall number (others - macOS)
+		jc		error					; if carry flag (on macOS)
 	%endif
 
-	syscall								; call (write in this case)
-	cmp		rax, 0
-	jl		error						; jump to error if syscall's return < 0
 	ret
 
 error:
-	neg			rax						; errno is negative, reverse it
-	mov			rcx, rax				; rcx used as tmp to hold rax's value
-	
-	mov			rdi, rax
 	%ifdef __LINUX__
-		call		__errno_location	; call errno (Linux)
-	%else
-		call		___error			; call errno (others - macOS)
+		neg			rax					; errno is negative, reverse it
 	%endif
 	
+	mov			rdi, rax				; rdi is used as tmp for holding the errno value before rax is changed by the call of errno function
+	call		ERR						; call errno
 	mov			[rax], rdi
 
 	mov			rax, -1					; write return -1 in case of error

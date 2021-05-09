@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/06 16:22:26 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/09 11:28:40 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,16 +52,25 @@ UNAME		:=	$(shell uname)
 
 ifeq ($(UNAME), Darwin)
 .s.o:
-			$(MUTE) nasm -fmacho64 -o $@ $?
+			$(MUTE) $(ASMCOMPIL) -fmacho64 -o $@ $?
 endif
 
 ifeq ($(UNAME), Linux)
 .s.o:
-			$(MUTE) nasm -felf64 -o $@ $?
+			$(MUTE) $(ASMCOMPIL) -felf64 -o $@ $?
 endif
 
+
+ifeq ($(UNAME), Linux)
+$(NAME):	$(OBJS)
+			$(MUTE) $(LIBC) $(NAME) $(OBJS) -D__LINUX__
+endif
+
+ifeq ($(UNAME), Darwin)
 $(NAME):	$(OBJS)
 			$(MUTE) $(LIBC) $(NAME) $(OBJS)
+endif
+
 
 all:		$(NAME)
 

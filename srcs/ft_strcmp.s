@@ -1,6 +1,12 @@
-global	_ft_strcmp
+%ifdef __LINUX__
+	%define FT_STRCMP	ft_strcmp
+%else
+	%define FT_STRCMP	_ft_strcmp
+%endif
 
-_ft_strcmp:
+global	FT_STRCMP
+
+FT_STRCMP:
 	xor		rax, rax		; set to 0
 	xor		rcx, rcx		; set to 0
 
