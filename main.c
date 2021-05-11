@@ -6,12 +6,14 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/11 15:17:23 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/11 16:50:56 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libasm.h>
 #include <stdio.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -20,6 +22,8 @@
 #define GREEN		"\e[1;32m"
 #define BLUE		"\e[1;34m"
 #define CLR_COLOR	"\e[0m"
+
+#define ALLOC_LST() ((t_list *)calloc(1, sizeof(t_list)))	// return ptr allocated
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +245,35 @@ void		test_strdup(void) {
 	TST_FT_STRDUP("test here");
 }
 
-#define ALLOC_LST() ((t_list *)calloc(1, sizeof(t_list)))	// return ptr allocated
+////////////////////////////////////////////////////////////////////////////////
+// FT_LIST_PUSH_FRONT TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_LIST_PUSH_FRONT__)
+# define TST_FT_LIST_PUSH_FRONT(lst, content)									\
+	do {																		\
+		printf("ptr[%p]\n", content);											\
+		ft_list_push_front(&lst, content);										\
+		if ((ptrdiff_t)(content - lst->data) == 0) {							\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			printf("=> expected[%s] got[%s]\n", content, lst->data);			\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => expected[%s] got[%s]\n",		\
+					content, lst->data);										\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_LIST_PUSH_FRONT(lst, data) ((void)lst)
+#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
+
+void		test_list_push_front(void) {
+	t_list							*lst = NULL;
+	__attribute__((unused)) void	*s1 = (void *)strdup("Bonjour");
+
+	// TST_FT_LIST_PUSH_FRONT(lst, NULL);
+	TST_FT_LIST_PUSH_FRONT(lst, s1);
+	(void)s1;
+}
+
 void		test_list_size(void) {
 	t_list	*lst = NULL;
 	
@@ -301,6 +333,10 @@ int		main(void)
 	////////////////////////////////////
 	// BONUS
 	////////////////////////////////////
+
+	#if defined(__FT_LIST_PUSH_FRONT__)
+	make_test("ft_list_push_front", &test_list_push_front);
+	#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
 
 	#if defined(__FT_LIST_SIZE__)
 	make_test("ft_list_size", &test_list_size);

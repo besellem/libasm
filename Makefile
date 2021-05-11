@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/11 15:02:14 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/11 16:40:08 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS		+=	$(SRCS_FOLDER)/ft_write.s
 SRCS		+=	$(SRCS_FOLDER)/ft_read.s
 SRCS		+=	$(SRCS_FOLDER)/ft_strdup.s
 SRCS		+=	$(SRCS_FOLDER)/ft_list_size.s
+SRCS		+=	$(SRCS_FOLDER)/ft_list_push_front.s
 
 ## Objects
 OBJS		=	$(SRCS:.s=.o)
@@ -39,6 +40,7 @@ DEFINES		+=	-D__FT_WRITE__
 # DEFINES		+=	-D__FT_READ__
 DEFINES		+=	-D__FT_STRDUP__
 DEFINES		+=	-D__FT_LIST_SIZE__
+DEFINES		+=	-D__FT_LIST_PUSH_FRONT__
 
 
 ## Commands
@@ -81,10 +83,10 @@ test:		$(NAME)
 			$(MUTE) clear
 			
 			@ echo "# COMPILED"
-			@ ./$(MAIN_TEST) 2>/dev/null
+			# @ ./$(MAIN_TEST)
 
-# @ echo
-# $(MUTE) $(CC) $(CFLAGS) -fsanitize=address $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
+			@ echo
+			$(MUTE) $(CC) $(CFLAGS) -g3 -fsanitize=address $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
 # @ echo "# COMPILED WITH FSANITIZE"
 # @ ./$(MAIN_TEST) 2>/dev/null
 
