@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/09 11:35:37 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/11 14:21:00 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,161 +16,159 @@
 #include <string.h>
 #include <errno.h>
 
-#define RED "\e[1;31m"
-#define GREEN "\e[1;32m"
-#define CLR_COLOR "\e[0m"
+#define RED			"\e[1;31m"
+#define GREEN		"\e[1;32m"
+#define BLUE		"\e[1;34m"
+#define CLR_COLOR	"\e[0m"
 
 
-// TEST FT_STRLEN
-int		strlen_single_test(const char *str)
-{
-	size_t	my_len		= 0;
-	size_t	real_len	= strlen(str);
-	
-	#if defined(__FT_STRLEN__)
-	my_len = ft_strlen(str);
-	#endif	/* defined(__FT_STRLEN__) */
-	
-	if (my_len == real_len)
-		return (0);
-	else
-	{
-		printf(RED "KO" CLR_COLOR "\n");
-		return (1);
-	}
+////////////////////////////////////////////////////////////////////////////////
+// STRLEN TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_STRLEN__)
+# define TST_FT_STRLEN(s)														\
+	do {																		\
+		size_t my_len = ft_strlen(s), real_len = strlen(s);						\
+		if (my_len == real_len)	{												\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => real[%zu], mine[%zu]\n",		\
+					real_len, my_len);											\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_STRLEN(s) ((void)s)
+#endif	/* defined(__FT_STRLEN__) */
+
+
+////////////////////////////////////////////////////////////////////////////////
+// STRCPY TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_STRCPY__)
+# define STRCPY_BUF 100
+# define TST_FT_STRCPY(s)														\
+	do {																		\
+		char	real_dst[STRCPY_BUF], my_dst[STRCPY_BUF];						\
+		ft_strcpy(my_dst, s);													\
+		strcpy(real_dst, s);													\
+		if (0 == strcmp(real_dst, my_dst)) {									\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => real_dst[%s] my_dst[%s]\n",		\
+					real_dst, my_dst);											\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_STRCPY(s) ((void)s)
+#endif	/* defined(__FT_STRCPY__) */
+
+
+////////////////////////////////////////////////////////////////////////////////
+// STRCMP TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_STRCMP__)
+# define TST_FT_STRCMP(s1, s2)													\
+	do {																		\
+		const char *_s1	= s1;													\
+		const char *_s2	= s2;													\
+		int my_diff = ft_strcmp(_s1, _s2), real_diff = strcmp(_s1, _s2);		\
+		if (my_diff == real_diff) {												\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => real_diff[%d] my_diff[%d]\n",	\
+					real_diff, my_diff);										\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_STRCMP(s1, s2) ((void)s1)
+#endif	/* defined(__FT_STRCMP__) */
+
+
+////////////////////////////////////////////////////////////////////////////////
+// WRITE TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_WRITE__)
+# define TST_FT_WRITE(fildes, buf, nbyte)										\
+	do {																		\
+		ssize_t	real_ret	= write(fildes, buf, nbyte);						\
+		int		real_errno	= errno;											\
+		errno = 0;																\
+		ssize_t	my_ret = ft_write(fildes, buf, nbyte);							\
+		int		my_errno = errno;												\
+		errno = 0;																\
+		if (my_ret == real_ret && my_errno == real_errno) {						\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => "								\
+					"real_ret[%zd] real_errno[%d]"								\
+					"my_ret[%zd] my_errno[%d]\n",								\
+					real_ret, real_errno, my_ret, my_errno);					\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_WRITE(fildes, buf, nbyte) ((void)fildes)
+#endif	/* defined(__FT_WRITE__) */
+
+
+////////////////////////////////////////////////////////////////////////////////
+// STRDUP TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_STRDUP__)
+# define TST_FT_STRDUP(s)														\
+	do {																		\
+		char *my_dst = ft_strdup(s), *real_dst = strdup(s);						\
+		int diff = diff = strcmp(real_dst, my_dst);								\
+		if (0 == diff) {														\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => real_dst[%s] my_dst[%s]\n",		\
+					real_dst, my_dst);											\
+		}																		\
+		if (real_dst) { free(real_dst); }										\
+		if (my_dst) { free(my_dst); }											\
+	} while (0)
+#else
+# define TST_FT_STRDUP(s) ((void)s)
+#endif	/* defined(__FT_STRDUP__) */
+
+// #ifndef __FT_STRDUP__
+// # define __FT_STRDUP__
+// #endif
+
+void	test_strlen(void) {
+	TST_FT_STRLEN("Hello");
+	TST_FT_STRLEN("WHY NOT \0 ??");
+	TST_FT_STRLEN("");
+	TST_FT_STRLEN("Hello world !\nHow are you ?");
 }
 
-int		test_strlen(void)
-{
-	int	ret = 0;
-
-	ret += strlen_single_test("Hello");
-	ret += strlen_single_test("WHY NOT \0 ??");
-	ret += strlen_single_test("");
-	ret += strlen_single_test("Hello world !\nHow are you ?");
-	return (ret);
+void	test_strcpy(void) {
+	TST_FT_STRCPY("");
+	TST_FT_STRCPY("Hello");
+	TST_FT_STRCPY("Hello world !\0 ?");
+	TST_FT_STRCPY("Hello world !\0?");
+	TST_FT_STRCPY("abc");
+	TST_FT_STRCPY("abc");
+	TST_FT_STRCPY("test here");
 }
 
-
-// TEST FT_STRCPY
-#define STRCPY_BUF 100
-
-int		strcpy_single_test(const char *str)
-{
-	char	real_dst[STRCPY_BUF];
-	char	my_dst[STRCPY_BUF];
-	
-	#if defined(__FT_STRCPY__)
-	ft_strcpy(my_dst, str);
-	#endif	/* defined(__FT_STRCPY__) */
-	
-	strcpy(real_dst, str);
-	if (0 == strcmp(real_dst, my_dst))
-		return (0);
-	else
-	{
-		printf(RED "KO" CLR_COLOR " => real_dst[%s] my_dst[%s]\n", real_dst, my_dst);
-		return (1);
-	}
+void		test_strcmp(void) {
+	TST_FT_STRCMP("", "");
+	TST_FT_STRCMP("Hello", "Hello");
+	TST_FT_STRCMP("Hello world !\0 ?", "Hello world !\0 ?");
+	TST_FT_STRCMP("Hello world !\0?", "Hello world !\0 ?");
+	TST_FT_STRCMP("abc", "abd");
+	TST_FT_STRCMP("abc", "aba");
+	TST_FT_STRCMP("abc", "zbc");
+	TST_FT_STRCMP("test here", "another test, why not ?");
 }
 
-int		test_strcpy(void)
-{
-	int	ret = 0;
-
-	ret += strcpy_single_test("");
-	ret += strcpy_single_test("Hello");
-	ret += strcpy_single_test("Hello world !\0 ?");
-	ret += strcpy_single_test("Hello world !\0?");
-	ret += strcpy_single_test("abc");
-	ret += strcpy_single_test("abc");
-	ret += strcpy_single_test("test here");
-	return (ret);
-}
-
-
-// TEST FT_STRCMP
-int		strcmp_single_test(const char *s1, const char *s2)
-{
-	const char	*_s1	= s1;
-	const char	*_s2	= s2;
-	int	my_diff			= 0;
-	int	real_diff		= strcmp(_s1, _s2);
-	
-	#if defined(__FT_STRCMP__)
-	my_diff = ft_strcmp(_s1, _s2);
-	#endif	/* defined(__FT_STRCMP__) */
-	
-	if (my_diff == real_diff)
-	{
-		// printf(GREEN "OK" CLR_COLOR " => real_diff[%d] my_diff[%d]\n", real_diff, my_diff);
-		return (0);
-	}
-	else
-	{
-		printf(RED "KO" CLR_COLOR " => real_diff[%d] my_diff[%d]\n", real_diff, my_diff);
-		return (1);
-	}
-}
-
-int		test_strcmp(void)
-{
-	int	ret = 0;
-
-	ret += strcmp_single_test("", "");
-	ret += strcmp_single_test("Hello", "Hello");
-	ret += strcmp_single_test("Hello world !\0 ?", "Hello world !\0 ?");
-	ret += strcmp_single_test("Hello world !\0?", "Hello world !\0 ?");
-	ret += strcmp_single_test("abc", "abd");
-	ret += strcmp_single_test("abc", "aba");
-	ret += strcmp_single_test("abc", "zbc");
-	ret += strcmp_single_test("test here", "another test, why not ?");
-	return (ret);
-}
-
-
-// TEST FT_WRITE
-int		write_single_test(int fildes, const void *buf, size_t nbyte)
-{
-	ssize_t	my_ret		= 0;
-	ssize_t	real_ret	= write(fildes, buf, nbyte);
-	int		my_errno	= 0;
-	int		real_errno	= errno;
-
-	errno = 0;
-	#if defined(__FT_WRITE__)
-	my_ret = ft_write(fildes, buf, nbyte);
-	my_errno = errno;
-	errno = 0;
-	#endif	/* defined(__FT_WRITE__) */
-	
-	if (my_errno == real_errno) // Check errno
-		return (0);
-	else
-	{
-		printf(RED "KO => real_errno[%d] my_errno[%d]" CLR_COLOR "\n", real_errno, my_errno);
-		return (1);
-	}
-
-	if (my_ret == real_ret) // Check length
-		return (0);
-	else
-	{
-		printf(RED "KO" CLR_COLOR " => real_ret[%zd] my_ret[%zd]\n", real_ret, my_ret);
-		return (1);
-	}
-}
-
-int		test_write(void)
-{
-	int	ret = 0;
-
-	ret += write_single_test(STDERR_FILENO, "Hello", 5);
-	ret += write_single_test(STDERR_FILENO, "", 0);
-	ret += write_single_test(STDERR_FILENO, "Hello world ! How are you ?", 27);
-	ret += write_single_test(234, "Hello", 5);
-	ret += write_single_test(234, "Hello world ! How are you ?", 27);
-	return (ret);
+void		test_write(void) {
+	TST_FT_WRITE(STDERR_FILENO, "Hello", 5);
+	TST_FT_WRITE(STDERR_FILENO, "", 0);
+	TST_FT_WRITE(STDERR_FILENO, "Hello world ! How are you ?", 27);
+	TST_FT_WRITE(234, "Hello", 5);
+	TST_FT_WRITE(234, "Hello world ! How are you ?", 27);
 }
 
 
@@ -206,67 +204,29 @@ int		read_single_test(int fildes, void *buf, size_t nbyte)
 	}
 }
 
-int		test_read(void)
-{
-	int	ret = 0;
+void		test_read(void) {
+	read_single_test(STDERR_FILENO, "Hello", 5);
+	read_single_test(STDERR_FILENO, "", 0);
+	read_single_test(STDERR_FILENO, "Hello world ! How are you ?", 27);
+	read_single_test(234, "Hello", 5);
+	read_single_test(234, "Hello world ! How are you ?", 27);
+}
 
-	ret += read_single_test(STDERR_FILENO, "Hello", 5);
-	ret += read_single_test(STDERR_FILENO, "", 0);
-	ret += read_single_test(STDERR_FILENO, "Hello world ! How are you ?", 27);
-	ret += read_single_test(234, "Hello", 5);
-	ret += read_single_test(234, "Hello world ! How are you ?", 27);
-	return (ret);
+void		test_strdup(void) {
+	TST_FT_STRDUP("");
+	TST_FT_STRDUP("Hello");
+	TST_FT_STRDUP("Hello world !\0 ?");
+	TST_FT_STRDUP("Hello world !\0?");
+	TST_FT_STRDUP("abc");
+	TST_FT_STRDUP("abc");
+	TST_FT_STRDUP("test here");
 }
 
 
-// TEST FT_STRDUP
-int		strdup_single_test(const char *str)
+void	make_test(const char *func_name, void (*func)(void))
 {
-	char	*my_dst		= NULL;
-	char	*real_dst	= strdup(str);
-	int		diff;
-	
-	#if defined(__FT_STRDUP__)
-	my_dst = ft_strdup(str);
-	#endif	/* defined(__FT_STRDUP__) */
-	
-	diff = strcmp(real_dst, my_dst);
-
-	if (real_dst)
-		free(real_dst);
-	if (my_dst)
-		free(my_dst);
-	
-	if (0 == diff)
-		return (0);
-	else
-	{
-		printf(RED "KO" CLR_COLOR " => real_dst[%s] my_dst[%s]\n", real_dst, my_dst);
-		return (1);
-	}
-}
-
-int		test_strdup(void)
-{
-	int	ret = 0;
-
-	ret += strdup_single_test("");
-	ret += strdup_single_test("Hello");
-	ret += strdup_single_test("Hello world !\0 ?");
-	ret += strdup_single_test("Hello world !\0?");
-	ret += strdup_single_test("abc");
-	ret += strdup_single_test("abc");
-	ret += strdup_single_test("test here");
-	return (ret);
-}
-
-
-void	make_test(const char *func_name, int (*func)(void))
-{
-	if (func())
-		printf(RED "%s is KO" CLR_COLOR "\n", func_name);
-	else
-		printf(GREEN "%s is OK!" CLR_COLOR "\n", func_name);
+	printf(BLUE "# Testing %s..." CLR_COLOR "\n", func_name);
+	func();
 }
 
 
@@ -296,6 +256,15 @@ int		main(void)
 	#if defined(__FT_STRDUP__)
 	make_test("ft_strdup", &test_strdup);
 	#endif	/* defined(__FT_STRDUP__) */
+
+
+	////////////////////////////////////
+	// BONUS
+	////////////////////////////////////
+
+	#if defined(__FT_LST_SIZE__)
+	make_test("ft_lst_size", &test_lst_size);
+	#endif	/* defined(__FT_LST_SIZE__) */
 
 	// ft_write(-1, "test", 1);
 	

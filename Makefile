@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/09 11:28:40 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/11 13:23:02 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ $(NAME):	$(OBJS)
 endif
 
 ifeq ($(UNAME), Darwin)
-$(NAME):
+$(NAME):	$(OBJS)
 			$(MUTE) $(LIBC) $(NAME) $(OBJS)
 endif
 
