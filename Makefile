@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/11 16:40:08 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/11 22:44:46 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,12 +83,12 @@ test:		$(NAME)
 			$(MUTE) clear
 			
 			@ echo "# COMPILED"
-			# @ ./$(MAIN_TEST)
+			#@ ./$(MAIN_TEST) 2>/dev/null
 
-			@ echo
+			#@ echo
 			$(MUTE) $(CC) $(CFLAGS) -g3 -fsanitize=address $(DEFINES) main.c -o $(MAIN_TEST) $(INC)
-# @ echo "# COMPILED WITH FSANITIZE"
-# @ ./$(MAIN_TEST) 2>/dev/null
+			# @ echo "# COMPILED WITH FSANITIZE"
+			# @ ./$(MAIN_TEST) 2>/dev/null
 
 clean:
 			$(MUTE) $(RM) $(OBJS)
@@ -96,6 +96,8 @@ clean:
 fclean:		clean
 			$(MUTE) $(RM) $(NAME)
 			$(MUTE) $(RM) $(MAIN_TEST)
+			$(MUTE) rm -rf $(MAIN_TEST).dSYM
+
 
 re:			fclean all
 

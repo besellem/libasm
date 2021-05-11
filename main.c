@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/11 16:50:56 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/11 23:16:51 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #define BLUE		"\e[1;34m"
 #define CLR_COLOR	"\e[0m"
 
+#define TO_STRING(x) #x										// convert x to a string
 #define ALLOC_LST() ((t_list *)calloc(1, sizeof(t_list)))	// return ptr allocated
 
 
@@ -137,6 +138,25 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// FT_LIST_PUSH_FRONT TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_LIST_PUSH_FRONT__)
+# define TST_FT_LIST_PUSH_FRONT(lst, content)									\
+	do {																		\
+		ft_list_push_front(&lst, content);										\
+		if (lst && content == lst->data) {										\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => expected[%s] got[%s]\n",		\
+					content, lst->data);										\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_LIST_PUSH_FRONT(lst, data) ((void)lst)
+#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
+
+
+////////////////////////////////////////////////////////////////////////////////
 // FT_LIST_SIZE TEST
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(__FT_LIST_SIZE__)
@@ -154,9 +174,6 @@
 # define TST_FT_LIST_SIZE(lst, size_expected) ((void)lst)
 #endif	/* defined(__FT_LIST_SIZE__) */
 
-// #ifndef __FT_STRDUP__
-// # define __FT_STRDUP__
-// #endif
 
 void	test_strlen(void) {
 	TST_FT_STRLEN("Hello");
@@ -245,33 +262,21 @@ void		test_strdup(void) {
 	TST_FT_STRDUP("test here");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// FT_LIST_PUSH_FRONT TEST
-////////////////////////////////////////////////////////////////////////////////
-#if defined(__FT_LIST_PUSH_FRONT__)
-# define TST_FT_LIST_PUSH_FRONT(lst, content)									\
-	do {																		\
-		printf("ptr[%p]\n", content);											\
-		ft_list_push_front(&lst, content);										\
-		if ((ptrdiff_t)(content - lst->data) == 0) {							\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
-			printf("=> expected[%s] got[%s]\n", content, lst->data);			\
-		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => expected[%s] got[%s]\n",		\
-					content, lst->data);										\
-		}																		\
-	} while (0)
-#else
-# define TST_FT_LIST_PUSH_FRONT(lst, data) ((void)lst)
-#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
-
 void		test_list_push_front(void) {
 	t_list							*lst = NULL;
-	__attribute__((unused)) void	*s1 = (void *)strdup("Bonjour");
+	__attribute__((unused)) void	*s1 = strdup("Bonjour");
+	__attribute__((unused)) void	*s2 = strdup("Au revoir");
 
-	// TST_FT_LIST_PUSH_FRONT(lst, NULL);
+	TST_FT_LIST_PUSH_FRONT(lst, NULL);
 	TST_FT_LIST_PUSH_FRONT(lst, s1);
-	(void)s1;
+	TST_FT_LIST_PUSH_FRONT(lst, s2);
+
+	t_list	*tmp = lst;
+	while (tmp)
+	{
+		fprintf(stderr, "%s[%s]\n", TO_STRING(tmp->data), tmp->data);
+		tmp = tmp->next;
+	}
 }
 
 void		test_list_size(void) {
@@ -295,16 +300,12 @@ void		test_list_size(void) {
 	TST_FT_LIST_SIZE(lst, 6);
 }
 
-void	make_test(const char *func_name, void (*func)(void))
-{
+void	make_test(const char *func_name, void (*func)(void)) {
 	printf(BLUE "# Testing %s..." CLR_COLOR "\n", func_name);
 	func();
 }
 
-
-// (avoid write syscalls to be printed)
-int		main(void)
-{
+int		main(void) {
 	#if defined(__FT_STRLEN__)
 	make_test("ft_strlen", &test_strlen);
 	#endif	/* defined(__FT_STRLEN__) */
@@ -329,11 +330,9 @@ int		main(void)
 	make_test("ft_strdup", &test_strdup);
 	#endif	/* defined(__FT_STRDUP__) */
 
-
 	////////////////////////////////////
 	// BONUS
 	////////////////////////////////////
-
 	#if defined(__FT_LIST_PUSH_FRONT__)
 	make_test("ft_list_push_front", &test_list_push_front);
 	#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
@@ -341,8 +340,6 @@ int		main(void)
 	#if defined(__FT_LIST_SIZE__)
 	make_test("ft_list_size", &test_list_size);
 	#endif	/* defined(__FT_LIST_SIZE__) */
-
-	// ft_write(-1, "test", 1);
 	
 	return (0);
 }
