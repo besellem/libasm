@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/11 14:21:00 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/11 15:17:23 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,25 @@
 # define TST_FT_STRDUP(s) ((void)s)
 #endif	/* defined(__FT_STRDUP__) */
 
+
+////////////////////////////////////////////////////////////////////////////////
+// FT_LIST_SIZE TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_LIST_SIZE__)
+# define TST_FT_LIST_SIZE(lst, size_expected)									\
+	do {																		\
+		int size = ft_list_size(lst);											\
+		if (size == size_expected) {											\
+			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+		} else {																\
+			printf("[" RED "KO" CLR_COLOR "] => expected[%d] got[%d]\n",		\
+					size_expected, size);										\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_LIST_SIZE(lst, size_expected) ((void)lst)
+#endif	/* defined(__FT_LIST_SIZE__) */
+
 // #ifndef __FT_STRDUP__
 // # define __FT_STRDUP__
 // #endif
@@ -222,6 +241,27 @@ void		test_strdup(void) {
 	TST_FT_STRDUP("test here");
 }
 
+#define ALLOC_LST() ((t_list *)calloc(1, sizeof(t_list)))	// return ptr allocated
+void		test_list_size(void) {
+	t_list	*lst = NULL;
+	
+	TST_FT_LIST_SIZE(lst, 0);
+	
+	lst = ALLOC_LST();
+	lst->next = NULL;
+	TST_FT_LIST_SIZE(lst, 1);
+
+	lst->next = ALLOC_LST();
+	lst->next->next = NULL;
+	TST_FT_LIST_SIZE(lst, 2);
+	
+	lst->next->next = ALLOC_LST();
+	lst->next->next->next = ALLOC_LST();
+	lst->next->next->next->next = ALLOC_LST();
+	lst->next->next->next->next->next = ALLOC_LST();
+	lst->next->next->next->next->next->next = NULL;
+	TST_FT_LIST_SIZE(lst, 6);
+}
 
 void	make_test(const char *func_name, void (*func)(void))
 {
@@ -262,9 +302,9 @@ int		main(void)
 	// BONUS
 	////////////////////////////////////
 
-	#if defined(__FT_LST_SIZE__)
-	make_test("ft_lst_size", &test_lst_size);
-	#endif	/* defined(__FT_LST_SIZE__) */
+	#if defined(__FT_LIST_SIZE__)
+	make_test("ft_list_size", &test_list_size);
+	#endif	/* defined(__FT_LIST_SIZE__) */
 
 	// ft_write(-1, "test", 1);
 	

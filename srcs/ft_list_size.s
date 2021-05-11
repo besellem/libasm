@@ -1,20 +1,20 @@
 %ifdef __LINUX__
-	%define FT_LST_SIZE	ft_lst_size
+	%define FT_LIST_SIZE	ft_list_size
 %else
-	%define FT_LST_SIZE	_ft_lst_size
+	%define FT_LIST_SIZE	_ft_list_size
 %endif
 
-global	FT_LST_SIZE
+global	FT_LIST_SIZE
 
-FT_LST_SIZE:
-	xor		rcx, rcx
-	mov		r8, rdi
+FT_LIST_SIZE:
+	xor		rcx, rcx			; init rcx to 0
+	mov		r8, rdi				; r8 hold `lst'
 	jmp		.loop
 
 .loop:
-	mov		r8, byte [r8 + 8]
 	cmp		r8, 0
 	jz		.return
+	mov		r8, qword [r8 + 8]	; lst->next != NULL
 	inc		rcx
 	jmp		.loop
 

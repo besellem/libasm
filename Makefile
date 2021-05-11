@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/11 13:23:02 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/11 15:02:14 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS		+=	$(SRCS_FOLDER)/ft_strcmp.s
 SRCS		+=	$(SRCS_FOLDER)/ft_write.s
 SRCS		+=	$(SRCS_FOLDER)/ft_read.s
 SRCS		+=	$(SRCS_FOLDER)/ft_strdup.s
+SRCS		+=	$(SRCS_FOLDER)/ft_list_size.s
 
 ## Objects
 OBJS		=	$(SRCS:.s=.o)
@@ -37,6 +38,7 @@ DEFINES		+=	-D__FT_STRCMP__
 DEFINES		+=	-D__FT_WRITE__
 # DEFINES		+=	-D__FT_READ__
 DEFINES		+=	-D__FT_STRDUP__
+DEFINES		+=	-D__FT_LIST_SIZE__
 
 
 ## Commands
