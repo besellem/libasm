@@ -13,8 +13,8 @@ extern	ERR
 
 FT_READ:
 	; Check if Linux or macOS at compilation
-	mov			rax, SCALL				; write's syscall number
-	syscall								; call (write in this case)
+	mov			rax, SCALL				; read's syscall number
+	syscall								; call (read in this case)
 
 	%ifdef __LINUX__
 		cmp		rax, 0
@@ -34,5 +34,5 @@ error:
 	call		ERR						; call errno
 	mov			[rax], rdi
 
-	mov			rax, -1					; write return -1 in case of error
+	mov			rax, -1					; read return -1 in case of error
 	ret
