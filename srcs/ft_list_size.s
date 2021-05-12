@@ -12,9 +12,9 @@ FT_LIST_SIZE:
 	jmp		.loop
 
 .loop:
-	cmp		r8, 0
+	cmp		r8, 0				; lst->next != NULL
 	jz		.return
-	mov		r8, qword [r8 + 8]	; lst->next != NULL
+	mov		r8, qword [r8 + 8]	; lst = lst->next
 	inc		rcx
 	jmp		.loop
 

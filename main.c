@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/12 10:14:05 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/12 11:28:03 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,8 +239,8 @@ void		test_write(void) {
 	TST_FT_WRITE(STDERR_FILENO, "Hello", 5);
 	TST_FT_WRITE(STDERR_FILENO, "", 0);
 	TST_FT_WRITE(STDERR_FILENO, "Hello world ! How are you ?", 27);
-	TST_FT_WRITE(234, "Hello", 5);
-	TST_FT_WRITE(234, "Hello world ! How are you ?", 27);
+	TST_FT_WRITE(-1, "Hello", 5);
+	TST_FT_WRITE(-1, "Hello world ! How are you ?", 27);
 }
 
 #define TEST_TXT_FILE "file.txt"
@@ -274,9 +274,9 @@ void		test_strdup(void) {
 }
 
 void		test_list_push_front(void) {
-	t_list	*lst = NULL;
-	void	*s1 = strdup("Bonjour");
-	void	*s2 = strdup("Au revoir");
+	__attribute__((unused)) t_list	*lst = NULL;
+	__attribute__((unused)) void	*s1 = strdup("Bonjour");
+	__attribute__((unused)) void	*s2 = strdup("Au revoir");
 
 	TST_FT_LIST_PUSH_FRONT(lst, NULL);
 	TST_FT_LIST_PUSH_FRONT(lst, s1);
@@ -316,6 +316,7 @@ void	make_test(const char *func_name, void (*func)(void)) {
 	func();
 }
 
+
 int		main(void) {
 	#if defined(__FT_STRLEN__)
 	make_test("ft_strlen", &test_strlen);
@@ -341,19 +342,21 @@ int		main(void) {
 	make_test("ft_strdup", &test_strdup);
 	#endif	/* defined(__FT_STRDUP__) */
 
-	////////////////////////////////////
-	// BONUS
-	////////////////////////////////////
+	// Bonus
+	#if defined(_BONUS_)
+		
 	printf("\n" RED "##########################\n");
 	printf("BONUS PART\n" "##########################" CLR_COLOR "\n");
 
-	#if defined(__FT_LIST_PUSH_FRONT__)
+	# if defined(__FT_LIST_PUSH_FRONT__)
 	make_test("ft_list_push_front", &test_list_push_front);
-	#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
+	# endif	/* defined(__FT_LIST_PUSH_FRONT__) */
 
-	#if defined(__FT_LIST_SIZE__)
+	# if defined(__FT_LIST_SIZE__)
 	make_test("ft_list_size", &test_list_size);
-	#endif	/* defined(__FT_LIST_SIZE__) */
-	
+	# endif	/* defined(__FT_LIST_SIZE__) */
+		
+	#endif /* defined(_BONUS_) */
+
 	return (0);
 }
