@@ -124,16 +124,16 @@
 #if defined(__FT_READ__)
 # define TST_FT_READ(real_fd, my_fd, nbyte)										\
 	do {																		\
-		char	real_buf[_MAX_READ_BUF + 1] = {0};								\
-		char	my_buf[_MAX_READ_BUF + 1] = {0};								\
-		ssize_t	real_ret	= read(real_fd, real_buf, nbyte);					\
-		int		real_errno	= errno;											\
-		errno = 0;																\
+		char	real_buf[_MAX_READ_BUF + 1];									\
+		char	my_buf[_MAX_READ_BUF + 1];										\
 		ssize_t	my_ret = ft_read(my_fd, my_buf, nbyte);							\
+		my_buf[nbyte > 0 ? nbyte : 0] = '\0';													\
 		int		my_errno = errno;												\
 		errno = 0;																\
-		real_buf[real_ret] = '\0';												\
-		my_buf[my_ret] = '\0';													\
+		ssize_t	real_ret	= read(real_fd, real_buf, nbyte);					\
+		real_buf[nbyte > 0 ? nbyte : 0] = '\0';													\
+		int		real_errno	= errno;											\
+		errno = 0;																\
 		if (my_ret == real_ret && my_errno == real_errno &&						\
 			0 == strcmp(real_buf, my_buf)) {									\
 			PF_OK();															\
@@ -253,13 +253,16 @@ void		test_read(void) {
 		printf("Error: Cannot test ft_read => fd won't open (not your fault)\n");
 		return ;
 	}
+
+
+
 	TST_FT_READ(real_fd, my_fd, 0);
 	TST_FT_READ(real_fd, my_fd, 1);
 	TST_FT_READ(real_fd, my_fd, 10);
 	TST_FT_READ(real_fd, my_fd, 9);
 	TST_FT_READ(real_fd, my_fd, _MAX_READ_BUF);
 	TST_FT_READ(real_fd, my_fd, -1);
-	TST_FT_READ(-1, -1, _MAX_READ_BUF);
+	TST_FT_READ(40, 40, _MAX_READ_BUF);
 	TST_FT_READ(-1, -1, _MAX_READ_BUF);
 }
 
