@@ -6,23 +6,29 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/11 23:16:51 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/12 10:14:05 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libasm.h>
+
 #include <stdio.h>
+#include <fcntl.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
+// Some color codes
 #define RED			"\e[1;31m"
 #define GREEN		"\e[1;32m"
 #define BLUE		"\e[1;34m"
 #define CLR_COLOR	"\e[0m"
 
+// Some useful macros
+#define KO "[" RED "KO" CLR_COLOR "] => "					// KO in tests
+#define PF_OK() printf("[" GREEN "OK" CLR_COLOR "]\n")		// print OK in tests
 #define TO_STRING(x) #x										// convert x to a string
 #define ALLOC_LST() ((t_list *)calloc(1, sizeof(t_list)))	// return ptr allocated
 
@@ -35,10 +41,9 @@
 	do {																		\
 		size_t my_len = ft_strlen(s), real_len = strlen(s);						\
 		if (my_len == real_len)	{												\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => real[%zu], mine[%zu]\n",		\
-					real_len, my_len);											\
+			printf(KO "real[%zu], mine[%zu]\n", real_len, my_len);				\
 		}																		\
 	} while (0)
 #else
@@ -57,10 +62,9 @@
 		ft_strcpy(my_dst, s);													\
 		strcpy(real_dst, s);													\
 		if (0 == strcmp(real_dst, my_dst)) {									\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => real_dst[%s] my_dst[%s]\n",		\
-					real_dst, my_dst);											\
+			printf(KO "real_dst[%s] my_dst[%s]\n", real_dst, my_dst);			\
 		}																		\
 	} while (0)
 #else
@@ -78,10 +82,9 @@
 		const char *_s2	= s2;													\
 		int my_diff = ft_strcmp(_s1, _s2), real_diff = strcmp(_s1, _s2);		\
 		if (my_diff == real_diff) {												\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => real_diff[%d] my_diff[%d]\n",	\
-					real_diff, my_diff);										\
+			printf(KO "real_diff[%d] my_diff[%d]\n", real_diff, my_diff);		\
 		}																		\
 	} while (0)
 #else
@@ -102,10 +105,9 @@
 		int		my_errno = errno;												\
 		errno = 0;																\
 		if (my_ret == real_ret && my_errno == real_errno) {						\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => "								\
-					"real_ret[%zd] real_errno[%d]"								\
+			printf(KO "real_ret[%zd] real_errno[%d]"							\
 					"my_ret[%zd] my_errno[%d]\n",								\
 					real_ret, real_errno, my_ret, my_errno);					\
 		}																		\
@@ -113,6 +115,39 @@
 #else
 # define TST_FT_WRITE(fildes, buf, nbyte) ((void)fildes)
 #endif	/* defined(__FT_WRITE__) */
+
+
+////////////////////////////////////////////////////////////////////////////////
+// READ TEST
+////////////////////////////////////////////////////////////////////////////////
+#define _MAX_READ_BUF 4096
+#if defined(__FT_READ__)
+# define TST_FT_READ(real_fd, my_fd, nbyte)										\
+	do {																		\
+		char	real_buf[_MAX_READ_BUF + 1] = {0};								\
+		char	my_buf[_MAX_READ_BUF + 1] = {0};								\
+		ssize_t	real_ret	= read(real_fd, real_buf, nbyte);					\
+		int		real_errno	= errno;											\
+		errno = 0;																\
+		ssize_t	my_ret = ft_read(my_fd, my_buf, nbyte);							\
+		int		my_errno = errno;												\
+		errno = 0;																\
+		real_buf[real_ret] = '\0';												\
+		my_buf[my_ret] = '\0';													\
+		if (my_ret == real_ret && my_errno == real_errno &&						\
+			0 == strcmp(real_buf, my_buf)) {									\
+			PF_OK();															\
+		} else {																\
+			printf(KO "\n");													\
+			printf("real_ret[%zd] real_buf[%s] real_errno[%d]\n",				\
+					real_ret, real_buf, real_errno);							\
+			printf("my_ret[%zd] my_buf[%s] my_errno[%d]\n",						\
+					my_ret, my_buf, my_errno);									\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_READ(real_fd, my_fd, nbyte) ((void)real_fd)
+#endif	/* defined(__FT_READ__) */
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,10 +159,9 @@
 		char *my_dst = ft_strdup(s), *real_dst = strdup(s);						\
 		int diff = diff = strcmp(real_dst, my_dst);								\
 		if (0 == diff) {														\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => real_dst[%s] my_dst[%s]\n",		\
-					real_dst, my_dst);											\
+			printf(KO "real_dst[%s] my_dst[%s]\n", real_dst, my_dst);			\
 		}																		\
 		if (real_dst) { free(real_dst); }										\
 		if (my_dst) { free(my_dst); }											\
@@ -145,10 +179,9 @@
 	do {																		\
 		ft_list_push_front(&lst, content);										\
 		if (lst && content == lst->data) {										\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => expected[%s] got[%s]\n",		\
-					content, lst->data);										\
+			printf(KO "expected[%s] got[%s]\n", content, lst->data);			\
 		}																		\
 	} while (0)
 #else
@@ -164,10 +197,9 @@
 	do {																		\
 		int size = ft_list_size(lst);											\
 		if (size == size_expected) {											\
-			printf("[" GREEN "OK" CLR_COLOR "]\n");								\
+			PF_OK();															\
 		} else {																\
-			printf("[" RED "KO" CLR_COLOR "] => expected[%d] got[%d]\n",		\
-					size_expected, size);										\
+			printf(KO "expected[%d] got[%d]\n", size_expected, size);			\
 		}																		\
 	} while (0)
 #else
@@ -211,45 +243,24 @@ void		test_write(void) {
 	TST_FT_WRITE(234, "Hello world ! How are you ?", 27);
 }
 
-
-// TEST FT_READ
-int		read_single_test(int fildes, void *buf, size_t nbyte)
-{
-	ssize_t	my_ret		= 0;
-	ssize_t	real_ret	= read(fildes, buf, nbyte);
-	int		my_errno	= 0;
-	int		real_errno	= errno;
-
-	errno = 0;
-	#if defined(__FT_READ__)
-	my_ret = ft_read(fildes, buf, nbyte);
-	my_errno = errno;
-	errno = 0;
-	#endif	/* defined(__FT_READ__) */
-	
-	if (my_errno == real_errno) // Check errno
-		return (0);
-	else
-	{
-		printf(RED "KO => real_errno[%d] my_errno[%d]" CLR_COLOR "\n", real_errno, my_errno);
-		return (1);
-	}
-
-	if (my_ret == real_ret) // Check length
-		return (0);
-	else
-	{
-		printf(RED "KO" CLR_COLOR " => real_ret[%zd] my_ret[%zd]\n", real_ret, my_ret);
-		return (1);
-	}
-}
-
+#define TEST_TXT_FILE "file.txt"
 void		test_read(void) {
-	read_single_test(STDERR_FILENO, "Hello", 5);
-	read_single_test(STDERR_FILENO, "", 0);
-	read_single_test(STDERR_FILENO, "Hello world ! How are you ?", 27);
-	read_single_test(234, "Hello", 5);
-	read_single_test(234, "Hello world ! How are you ?", 27);
+	int	real_fd	= open(TEST_TXT_FILE, O_RDONLY);
+	int	my_fd	= open(TEST_TXT_FILE, O_RDONLY);
+
+	if (real_fd == -1 || my_fd == -1)
+	{
+		printf("Error: Cannot test ft_read => fd won't open (not your fault)\n");
+		return ;
+	}
+	TST_FT_READ(real_fd, my_fd, 0);
+	TST_FT_READ(real_fd, my_fd, 1);
+	TST_FT_READ(real_fd, my_fd, 10);
+	TST_FT_READ(real_fd, my_fd, 9);
+	TST_FT_READ(real_fd, my_fd, _MAX_READ_BUF);
+	TST_FT_READ(real_fd, my_fd, -1);
+	TST_FT_READ(-1, -1, _MAX_READ_BUF);
+	TST_FT_READ(-1, -1, _MAX_READ_BUF);
 }
 
 void		test_strdup(void) {
@@ -263,9 +274,9 @@ void		test_strdup(void) {
 }
 
 void		test_list_push_front(void) {
-	t_list							*lst = NULL;
-	__attribute__((unused)) void	*s1 = strdup("Bonjour");
-	__attribute__((unused)) void	*s2 = strdup("Au revoir");
+	t_list	*lst = NULL;
+	void	*s1 = strdup("Bonjour");
+	void	*s2 = strdup("Au revoir");
 
 	TST_FT_LIST_PUSH_FRONT(lst, NULL);
 	TST_FT_LIST_PUSH_FRONT(lst, s1);
@@ -333,6 +344,9 @@ int		main(void) {
 	////////////////////////////////////
 	// BONUS
 	////////////////////////////////////
+	printf("\n" RED "##########################\n");
+	printf("BONUS PART\n" "##########################" CLR_COLOR "\n");
+
 	#if defined(__FT_LIST_PUSH_FRONT__)
 	make_test("ft_list_push_front", &test_list_push_front);
 	#endif	/* defined(__FT_LIST_PUSH_FRONT__) */
