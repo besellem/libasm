@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/12 11:28:03 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:20:16 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,33 @@
 #endif	/* defined(__FT_LIST_SIZE__) */
 
 
+////////////////////////////////////////////////////////////////////////////////
+// FT_LIST_SORT TEST
+////////////////////////////////////////////////////////////////////////////////
+#if defined(__FT_LIST_SORT__)
+# define TST_FT_LIST_SORT(lst, func)											\
+	do {																		\
+		ft_list_sort(&lst, func);												\
+		t_list	*tmp = lst;														\
+		int		check = 0;														\
+		while (tmp->next) {														\
+			if ((*func)(lst->data, lst->next->data) > 0) {						\
+				check = 1;														\
+				break ;															\
+			}																	\
+			tmp = tmp->next;													\
+		}																		\
+		if (check == 0) {														\
+			PF_OK();															\
+		} else {																\
+			printf(KO "list not sorted\n");										\
+		}																		\
+	} while (0)
+#else
+# define TST_FT_LIST_SORT(lst, func) ((void)lst)
+#endif	/* defined(__FT_LIST_SORT__) */
+
+
 void	test_strlen(void) {
 	TST_FT_STRLEN("Hello");
 	TST_FT_STRLEN("WHY NOT \0 ??");
@@ -314,6 +341,63 @@ void		test_list_size(void) {
 	TST_FT_LIST_SIZE(lst, 6);
 }
 
+void	ft_list_sort(t_list **begin_list, int (*cmp)())
+{
+	t_list	*ptr;
+	t_list	*ptr2;
+	t_list	*next;
+
+	if (!begin_list || !*begin_list || !cmp)
+		return ;
+	ptr = *begin_list;
+	while (ptr)
+	{
+		ptr2 = *begin_list;
+		while (ptr2->next)
+		{
+			if ((*cmp)(ptr2->data, ptr2->next->data) > 0)
+			{
+				next = ptr2->data;
+				ptr2->data = ptr2->next->data;
+				ptr2->next->data = next;
+			}
+			ptr2 = ptr2->next;
+		}
+		ptr = ptr->next;
+	}
+}
+
+void		test_list_sort(void) {
+	t_list	*lst = NULL;
+	
+	// If no segfault happens with NULL parameters, we're good
+	ft_list_sort(NULL, strcmp);
+	ft_list_sort(NULL, NULL);
+	ft_list_sort(&lst, NULL);
+
+	ft_list_push_front(&lst, "test4");
+	TST_FT_LIST_SORT(lst, strcmp);
+
+	ft_list_push_front(&lst, "test1");
+	ft_list_push_front(&lst, "test3");
+	ft_list_push_front(&lst, "test2");
+	TST_FT_LIST_SORT(lst, strcmp);
+
+	ft_list_push_front(&lst, "");
+	ft_list_push_front(&lst, "aflk - dgkjh/daf/[4509");
+	ft_list_push_front(&lst, "adghj59");
+	ft_list_push_front(&lst, "|     |");
+	ft_list_push_front(&lst, "\\");
+	TST_FT_LIST_SORT(lst, strcmp);
+	
+	t_list	*tmp = lst;
+	while (tmp)
+	{
+		fprintf(stderr, "%s[%s]\n", TO_STRING(tmp->data), tmp->data);
+		tmp = tmp->next;
+	}
+}
+
 void	make_test(const char *func_name, void (*func)(void)) {
 	printf(BLUE "# Testing %s..." CLR_COLOR "\n", func_name);
 	func();
@@ -347,8 +431,8 @@ int		main(void) {
 
 	// Bonus
 	#if defined(_BONUS_)
-		
-	printf("\n" RED "##########################\n");
+
+	printf(RED "##########################\n");
 	printf("BONUS PART\n" "##########################" CLR_COLOR "\n");
 
 	# if defined(__FT_LIST_PUSH_FRONT__)
@@ -358,7 +442,11 @@ int		main(void) {
 	# if defined(__FT_LIST_SIZE__)
 	make_test("ft_list_size", &test_list_size);
 	# endif	/* defined(__FT_LIST_SIZE__) */
-		
+
+	# if defined(__FT_LIST_SORT__)
+	make_test("ft_list_sort", &test_list_sort);
+	# endif	/* defined(__FT_LIST_SORT__) */
+
 	#endif /* defined(_BONUS_) */
 
 	return (0);
