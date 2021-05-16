@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/16 13:29:47 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/16 15:07:22 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,9 +371,12 @@ void		test_list_sort(void) {
 	t_list	*lst = NULL;
 	
 	// If no segfault happens with NULL parameters, we're good
+	
+	#if defined(__FT_LIST_SORT__)
 	ft_list_sort(NULL, strcmp);
 	ft_list_sort(NULL, NULL);
 	ft_list_sort(&lst, NULL);
+	#endif	/* defined(__FT_LIST_SORT__) */
 
 	ft_list_push_front(&lst, "test4");
 	TST_FT_LIST_SORT(lst, strcmp);
