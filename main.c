@@ -6,7 +6,7 @@
 /*   By: besellem <besellem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:36:39 by besellem          #+#    #+#             */
-/*   Updated: 2021/05/14 18:20:16 by besellem         ###   ########.fr       */
+/*   Updated: 2021/05/16 13:29:47 by besellem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,31 +341,31 @@ void		test_list_size(void) {
 	TST_FT_LIST_SIZE(lst, 6);
 }
 
-void	ft_list_sort(t_list **begin_list, int (*cmp)())
-{
-	t_list	*ptr;
-	t_list	*ptr2;
-	t_list	*next;
+// void	ft_list_sort(t_list **begin_list, int (*cmp)())
+// {
+// 	t_list	*ptr;
+// 	t_list	*ptr2;
+// 	t_list	*next;
 
-	if (!begin_list || !*begin_list || !cmp)
-		return ;
-	ptr = *begin_list;
-	while (ptr)
-	{
-		ptr2 = *begin_list;
-		while (ptr2->next)
-		{
-			if ((*cmp)(ptr2->data, ptr2->next->data) > 0)
-			{
-				next = ptr2->data;
-				ptr2->data = ptr2->next->data;
-				ptr2->next->data = next;
-			}
-			ptr2 = ptr2->next;
-		}
-		ptr = ptr->next;
-	}
-}
+// 	if (!begin_list || !*begin_list || !cmp)
+// 		return ;
+// 	ptr = *begin_list;
+// 	while (ptr)
+// 	{
+// 		ptr2 = *begin_list;
+// 		while (ptr2->next)
+// 		{
+// 			if ((*cmp)(ptr2->data, ptr2->next->data) > 0)
+// 			{
+// 				next = ptr2->data;
+// 				ptr2->data = ptr2->next->data;
+// 				ptr2->next->data = next;
+// 			}
+// 			ptr2 = ptr2->next;
+// 		}
+// 		ptr = ptr->next;
+// 	}
+// }
 
 void		test_list_sort(void) {
 	t_list	*lst = NULL;
@@ -384,9 +384,8 @@ void		test_list_sort(void) {
 	TST_FT_LIST_SORT(lst, strcmp);
 
 	ft_list_push_front(&lst, "");
-	ft_list_push_front(&lst, "aflk - dgkjh/daf/[4509");
+	ft_list_push_front(&lst, "aflk");
 	ft_list_push_front(&lst, "adghj59");
-	ft_list_push_front(&lst, "|     |");
 	ft_list_push_front(&lst, "\\");
 	TST_FT_LIST_SORT(lst, strcmp);
 	

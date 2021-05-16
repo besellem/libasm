@@ -6,7 +6,7 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/14 18:38:33 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/16 15:04:49 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ DEFINES			+=	-D__FT_STRDUP__
 BONUS_DEFINES	+=	-D_BONUS_
 BONUS_DEFINES	+=	-D__FT_LIST_PUSH_FRONT__
 BONUS_DEFINES	+=	-D__FT_LIST_SIZE__
-BONUS_DEFINES	+=	-D__FT_LIST_SORT__
+# BONUS_DEFINES	+=	-D__FT_LIST_SORT__
 
 
 ## Commands
