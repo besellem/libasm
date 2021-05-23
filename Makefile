@@ -6,11 +6,11 @@
 #    By: besellem <besellem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/24 16:52:40 by besellem          #+#    #+#              #
-#    Updated: 2021/05/16 15:04:49 by besellem         ###   ########.fr        #
+#    Updated: 2021/05/24 01:12:12 by besellem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MUTE		=	@
+MUTE		=	
 NAME		=	libasm.a
 MAIN_TEST	=	test
 
@@ -87,12 +87,12 @@ bonus:		all
 test:		$(NAME)
 			$(MUTE) $(CC) $(CFLAGS) $(DEFINES) -o $(MAIN_TEST) $(OBJS) main.c $(INC)
 			$(MUTE) clear
-			@ ./$(MAIN_TEST) 2>/dev/null
+			@./$(MAIN_TEST) 2>/dev/null
 
 bonus_test:	$(NAME)
 			$(MUTE) $(CC) $(CFLAGS) $(BONUS_DEFINES) -o $(MAIN_TEST) $(OBJS) main.c $(INC)
 			$(MUTE) clear
-			@ ./$(MAIN_TEST) 2>/dev/null
+			@./$(MAIN_TEST) 2>/dev/null
 
 clean:
 			$(MUTE) $(RM) $(OBJS)
@@ -104,4 +104,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		$(NAME) all bonus clean fclean re
+.PHONY:		all bonus clean fclean re
